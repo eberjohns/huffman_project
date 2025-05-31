@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "huffman_node.h": "c",
+        "encoder.h": "c"
+    }
+}
