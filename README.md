@@ -31,9 +31,7 @@ This project consists of two main programs: `huffman_compressor` and `huffman_de
 The compressor takes an input text file, generates a compressed binary file, and creates a separate map file containing the Huffman codes.
 
 **Command:**
-```
-Bash
-
+```Bash
 huffman_compressor <input_text_file> <output_compressed_file> <output_map_file>
 ```
 
@@ -43,9 +41,7 @@ huffman_compressor <input_text_file> <output_compressed_file> <output_map_file>
 
 **Example:**
 
-```
-Bash
-
+```Bash
 huffman_compressor input.txt compressed.bin huffman_map.txt
 ```
 
@@ -55,9 +51,7 @@ The decompressor uses the compressed binary file and the corresponding map file 
 
 **Command:**
 
-```
-Bash
-
+```Bash
 huffman_decompressor <compressed_input_file> <map_file> <decompressed_output_file>
 ```
 - `<compressed_input_file>`: The path to the compressed binary file (e.g., `compressed.bin`).
@@ -65,9 +59,7 @@ huffman_decompressor <compressed_input_file> <map_file> <decompressed_output_fil
 - `<decompressed_output_file>`: The path where the original decompressed text will be saved (e.g., `decompressed.txt`).
 
 **Example:**
-```
-Bash
-
+```Bash
 huffman_decompressor compressed.bin huffman_map.txt decompressed.txt
 ```
 
@@ -80,16 +72,12 @@ If you want to compile the project yourself (or modify it), follow these steps f
 You'll use gcc to compile the source files into executables.
 
 **For the Compressor:**
-```
-Bash
-
+```Bash
 gcc compress_main.c encoder.c linked_list.c min_priority_queue.c -o huffman_compressor
 ```
 
 **For the Decompressor:**
-```
-Bash
-
+```Bash
 gcc decompress_main.c decoder.c huffman_node.c min_priority_queue.c -o huffman_decompressor
 ```
 
