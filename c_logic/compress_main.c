@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> // For strlen, etc. if needed later
+#include <math.h> // For round() to round percentage
+
 
 #include "huffman_node.h"         // Defines HuffmanNode struct (indirectly used by PQ and codes)
 #include "min_priority_queue.h"   // PQ functions
@@ -16,6 +18,20 @@ HuffmanNode* create_huffman_node(int ch, int freq, HuffmanNode* left, HuffmanNod
     node->left = left;
     node->right = right;
     return node;
+}
+
+long get_file_size(const char *filename) {
+    FILE *file = fopen(filename, "rb"); // Open in binary read mode
+    if (file == NULL) {
+        perror("Error opening file to get size");
+        return -1; // Indicate error
+    }
+
+    fseek(file, 0, SEEK_END); // Go to the end of the file
+    long size = ftell(file);  // Get the current position (which is the size)
+    fclose(file);             // Close the file
+
+    return size;
 }
 
 int main(int argc, char *argv[]) {
@@ -206,6 +222,37 @@ int main(int argc, char *argv[]) {
 
         // 3. Encode the input file and write compressed bits to the specified output file
         encode_and_write_file(filename, output_compressed_filename);
+        
+        // --- NEW: Display Compression Statistics ---
+        printf("\n--- Compression Statistics ---\n");
+
+        long size_before_compression = get_file_size(filename);
+        long size_compressed_data = get_file_size(output_compressed_filename);
+        long size_map_file = get_file_size(output_map_filename);
+
+        if (size_before_compression != -1 && size_compressed_data != -1 && size_map_file != -1) {
+            long size_after_compression = size_compressed_data + size_map_file;
+
+            printf("Original File: %s (Size: %ld bytes)\n", filename, size_before_compression);
+            printf("Compressed Data File: %s (Size: %ld bytes)\n", output_compressed_filename, size_compressed_data);
+            printf("Map File: %s (Size: %ld bytes)\n", output_map_filename, size_map_file);
+            printf("Total Compressed Size (Data + Map): %ld bytes\n", size_after_compression);
+
+            if (size_before_compression > 0) {
+                double compression_ratio = (double)size_after_compression / size_before_compression;
+                double percentage_reduction = (1.0 - compression_ratio) * 100.0;
+                double percentage_of_original = compression_ratio * 100.0;
+
+                printf("Compression Ratio: %.2f%%\n", percentage_of_original); // Size after / Size before * 100
+                printf("Space Saved: %.2f%%\n", percentage_reduction); // (1 - Ratio) * 100
+            } else {
+                printf("Cannot calculate percentage for an empty input file.\n");
+            }
+        } else {
+            fprintf(stderr, "Could not retrieve all file sizes for compression statistics.\n");
+        }
+        printf("------------------------------\n");
+
     } else {
         printf("Failed to build Huffman tree. Codes cannot be generated, and file cannot be compressed.\n");
     }
