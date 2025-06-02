@@ -5,7 +5,7 @@
 
 // External HuffmanNode creation function (from min_priority_queue.c)
 extern HuffmanNode* create_huffman_node(int ch, int freq, HuffmanNode* left, HuffmanNode* right);
-// External Huffman tree freeing function (from huffman_codes.c)
+// External Huffman tree freeing function (from encoder.c)
 extern void free_huffman_tree(HuffmanNode* node);
 
 // This function builds the decoding tree from the char-to-code map
